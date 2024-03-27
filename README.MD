@@ -2,3 +2,5 @@
 
 ## JPEG image to SD card
 ## BMP image to SD Card
+
+Library is from ArdCAM

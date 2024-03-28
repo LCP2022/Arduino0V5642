@@ -11,7 +11,7 @@
 //first 14 bytes = header
 //second 40 bytes = inof header
 //thrid 12bytes =  color table 
-const char bmp_header[BMPIMAGEOFFSET] PROGMEM =
+const uint8_t bmp_header[BMPIMAGEOFFSET] PROGMEM =
 {
   0x42, 0x4D, 0x36, 0x58, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 
   0x28, 0x00, 0x00, 0x00, 0x40, 0x01, 0x00, 0x00, 0xF0, 0x00,
@@ -138,7 +138,7 @@ uint8_t read_fifo_burst_BMP(ArduCAM myCAM)
   uint32_t length = 0;
   char str[8];
   static int k = 0, p = 0; // for name
-  char VH, VL;
+  uint8_t VH, VL;
   byte buf[256];
   File outFile;
 
@@ -165,39 +165,47 @@ uint8_t read_fifo_burst_BMP(ArduCAM myCAM)
   Serial.println(F("File open error"));
   return 0;
   }
+  for (temp = 0; temp < BMPIMAGEOFFSET; temp++)
+  { 
+    buf[p++]= bmp_header[temp];
+    Serial.print(bmp_header[temp],HEX);
+  }
+  outFile.write(buf, p);
+  Serial.println("");
+  p = 0;
   myCAM.CS_LOW();
   myCAM.set_fifo_burst();//Set fifo burst mode
-  for (temp = 0; temp < BMPIMAGEOFFSET; temp++)
-  {
-    char ch = pgm_read_byte(&bmp_header[temp]);
-    buf[p++]= ch;
-  }
-  outFile.write(buf, k);
-  p = 0;
   int i = 0, j = 0;
   for (i = 0; i < 240; i++)
   { 
     for (j = 0; j < 320; j++)
     {
-      VH = SPI.transfer(0x00);
-      VL = SPI.transfer(0x00);
-      buf[p++] = VL;
-      buf[p++] = VH;
-      Serial.print(VL,HEX);
-      Serial.print(VH,HEX);
-      //Write image data to bufer if not full
-      if (p >= 256)
-      {
-      //Write 256 bytes image data to file from buffer
-      outFile.write(buf, 256);
-      p = 0;
-      }
+        VH = SPI.transfer(0x00);
+        VL = SPI.transfer(0x00);
+        if(p<256){
+          buf[p++] = VL;
+          buf[p++] = VH;
+          Serial.print(VL,HEX);
+          Serial.print(VH,HEX);
+        }
+        else{
+          //Write 256 bytes image data to file
+          myCAM.CS_HIGH();
+          outFile.write(buf, 256);
+          p = 0;
+          buf[p++] = VL;
+          buf[p++] = VH;
+          myCAM.CS_LOW();
+          myCAM.set_fifo_burst();
+        }
+      
     }
   }
   //Close the file
+  myCAM.CS_HIGH();
+  outFile.write(buf, p);
   outFile.close();
   Serial.println("");
-  myCAM.CS_HIGH();
   //Clear the capture done flag
   myCAM.clear_fifo_flag();
   Serial.println("Image Save OK");

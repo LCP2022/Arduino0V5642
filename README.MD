@@ -1,9 +1,9 @@
 # Arduino Nano 33 BLE Sense OV5642 Setup Tensorflow Lite
 
 ## Hardware use
-- (Arduino Nano 33 BLE Sense)[https://store-usa.arduino.cc/products/arduino-nano-33-ble-sense]
-- (OV5642 camera)[https://www.arducam.com/products/camera-breakout-board/5mp-ov5642/]
-- (Breakout Board for microSD Card)[https://www.pololu.com/product/2597]
+- Arduino Nano 33 BLE Sense [https://store-usa.arduino.cc/products/arduino-nano-33-ble-sense]
+- OV5642 camera [https://www.arducam.com/products/camera-breakout-board/5mp-ov5642/]
+- Breakout Board for microSD Card [https://www.pololu.com/product/2597]
  
 
 ## Folder use

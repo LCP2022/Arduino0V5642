@@ -10,6 +10,7 @@
 - JPEG image to SD card
 - BMP image to SD Card
 - Test Prediction image
+- OV5642 BMP to SD to inference image
 
 ## Arduino library
  - ArduCAM
@@ -20,4 +21,4 @@
  - keras 2 (keras 3 got error)
  - Numpy
  - matplotlib
- - Pillow
+ - Sklearn

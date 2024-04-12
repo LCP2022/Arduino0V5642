@@ -1,4 +1,4 @@
-# Arduino Nano 33 BLE Sense OV5642 Setup Tensorflow Lite
+# Arduino Nano 33 BLE Sense OV5642 TINYML
 
 ## Hardware use
 - Arduino Nano 33 BLE Sense [https://store-usa.arduino.cc/products/arduino-nano-33-ble-sense]
